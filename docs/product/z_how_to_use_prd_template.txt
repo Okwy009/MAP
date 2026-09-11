@@ -1,0 +1,14 @@
+When to use each template
+
+| Scenario                     | Mini PRD | Full PRD |
+| ---------------------------- | :------: | :------: |
+| Button text change           |     ✅    |     ❌    |
+| Bug fix                      |     ✅    |     ❌    |
+| Small UX improvement         |     ✅    |     ❌    |
+| New dashboard widget         |     ✅    |     ❌    |
+| New onboarding flow          |     ❌    |     ✅    |
+| New AI workflow              |     ❌    |     ✅    |
+| Pricing changes              |     ❌    |     ✅    |
+| Authentication changes       |     ❌    |     ✅    |
+| Core Decision Engine changes |     ❌    |     ✅    |
+| New product capability       |     ❌    |     ✅    |
