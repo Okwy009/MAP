@@ -117,8 +117,8 @@ Starting State: Creator is one of the 20 accounts migrated in MAP-001 (FR11), fl
 
 # Functional Requirements
 
-**FR1**
-The system shall present pricing tiers (Starter, Pro, Creator+ per `pricing.md`) to an authenticated, unpaid creator before they can access protected routes beyond authentication.
+**FR1 (amended 2026-09-12 — see decision_log.md, "Freemium pivot")**
+The system shall grant every new creator a Free tier by default upon signup, with no paywall blocking initial access. The pricing/upgrade screen (Starter, Pro, Creator+ per `pricing.md`) is shown contextually after the creator completes Onboarding (MAP-004) and experiences real value — not immediately after signup. Full contextual-trigger implementation is blocked on MAP-004; until then, Free-tier creators pass the access gate directly.
 
 **FR2**
 The system shall redirect the creator to Gumroad Checkout for the selected tier.

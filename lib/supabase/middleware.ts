@@ -1,8 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { isSubscriptionGateExempt, resolveGate } from "@/lib/access-gate";
-import { getEntitlement } from "@/lib/entitlement";
+import { resolveGate } from "@/lib/access-gate";
 
 export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -64,14 +63,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthenticated = user !== null;
-  // Skip the extra DB round-trip when the path doesn't need it (auth pages,
-  // API routes, the pricing screen itself).
-  const exempt = isSubscriptionGateExempt(pathname);
-  const isEntitled =
-    isAuthenticated && !exempt ? (await getEntitlement(supabase, user.id)).entitled : false;
-
-  const decision = resolveGate({ pathname, isAuthenticated, isEntitled });
+  const decision = resolveGate({ pathname, isAuthenticated: user !== null });
 
   if (decision.action === "redirect") {
     const url = request.nextUrl.clone();

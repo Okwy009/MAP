@@ -15,9 +15,16 @@ const MAX_POLLS = 15; // ~1 minute, then stop bothering the server
  * Gumroad Membership products don't support a custom post-purchase redirect,
  * so there's no "I just paid" signal in the URL — the founder's manual
  * "Continue to MAP" link on Gumroad's own confirmation page points at the
- * site root either way. This renders as an unobtrusive banner on /pricing
- * (where the access-gate sends any authenticated-but-unentitled visit) and
- * polls quietly; it does not assume the visitor actually just paid.
+ * site root either way. Renders as an unobtrusive banner on /pricing and
+ * polls quietly; does not assume the visitor actually just paid.
+ *
+ * Freemium note: since the access-gate no longer redirects anyone to
+ * /pricing (it's a voluntary upgrade page now), this banner's original
+ * trigger path — land on `/`, get bounced back here while unconfirmed — no
+ * longer exists. A real purchaser who clicks "Continue to MAP" now lands
+ * directly on `/` at their (at-least-free) tier and won't see this banner at
+ * all. It still fires correctly for anyone who happens to be on /pricing when
+ * their tier changes, but is no longer reliably reachable by the happy path.
  */
 export function PaymentPendingState() {
   const router = useRouter();
@@ -34,8 +41,11 @@ export function PaymentPendingState() {
       try {
         const res = await fetch("/api/subscription/status", { cache: "no-store" });
         if (res.ok) {
-          const data = (await res.json()) as { entitled?: boolean };
-          if (data.entitled) {
+          const data = (await res.json()) as { tier?: string | null };
+          // Freemium: `entitled` is always true now (free is the default), so
+          // it no longer signals "purchase confirmed" — check the resolved
+          // tier actually moved off "free" instead.
+          if (data.tier && data.tier !== "free") {
             clearInterval(id);
             router.replace("/");
             return;

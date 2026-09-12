@@ -1,20 +1,25 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import type { Tier } from "@/types/subscription";
+import type { EffectiveTier, Tier } from "@/types/subscription";
 
-export type EntitlementReason = "free_migrated" | "active_subscription" | "none";
+export type EntitlementReason = "free_migrated" | "active_subscription" | "free_default";
 
 export interface Entitlement {
+  /** Always true post-freemium-pivot — there is no "blocked" state anymore. */
   entitled: boolean;
   reason: EntitlementReason;
-  tier: Tier | null;
+  /** null only for migrated_from_manual — deliberately not mapped onto the tier ladder yet (docs/known_issues.md). */
+  tier: EffectiveTier | null;
 }
 
 /**
- * Active subscription OR the free migrated_from_manual flag (MAP-002 FR8/FR12).
- * Shared by the access-gate middleware and the creator-facing status endpoint
- * so the two never drift. `client` must be RLS-scoped to `userId` (the
- * request-bound SSR client) — reads are the caller's own rows only.
+ * A creator's effective tier: the free migrated_from_manual grandfather flag,
+ * an active paid subscription, or — the freemium default (decision_log.md
+ * "Freemium pivot", 2026-09-12) — the free tier for everyone else, including
+ * a creator with no subscription row or an inactive/refunded one. Shared by
+ * GET /api/subscription/status and PaymentPendingState's polling check.
+ * `client` must be RLS-scoped to `userId` (the request-bound SSR client) —
+ * reads are the caller's own rows only.
  */
 export async function getEntitlement(client: SupabaseClient, userId: string): Promise<Entitlement> {
   const { data: profile } = await client
@@ -37,9 +42,7 @@ export async function getEntitlement(client: SupabaseClient, userId: string): Pr
     return { entitled: true, reason: "active_subscription", tier: subscription.tier as Tier };
   }
 
-  return {
-    entitled: false,
-    reason: "none",
-    tier: (subscription?.tier as Tier | undefined) ?? null,
-  };
+  // Freemium: no row, or an inactive/refunded one, collapses to the free
+  // baseline — never a block. Historical paid tier is not surfaced once inactive.
+  return { entitled: true, reason: "free_default", tier: "free" };
 }

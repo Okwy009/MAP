@@ -1,5 +1,8 @@
 export type Tier = "starter" | "pro" | "creator_plus";
 
+/** Tier plus the freemium default — what getEntitlement actually resolves to. */
+export type EffectiveTier = Tier | "free";
+
 export type SubscriptionStatus = "active" | "inactive";
 
 export interface Subscription {

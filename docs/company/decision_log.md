@@ -169,5 +169,29 @@
 
 ---
 
+## Decision
 
+**Date:** 2026-09-12
+
+**Owner:** Founder
+
+**Question:** What defines each pricing tier's value, beyond price points alone?
+
+**Decision:** MAP's four tiers map to four progressive "stages" of the product experience, each building on the last: Stage 1 (Free) = Dashboard + 30-Day Plan via the deterministic Decision Engine; Stage 2 (Starter, $19) = adds the Engagement Tracker (completion tracking, input tracking, weekly review); Stage 3 (Pro, $49) = adds adaptive AI recommendations, deliberately gated on Stage 2's tracked history existing first; Stage 4 (Creator+, $99) = adds multi-platform content distribution (Substack, Instagram, TikTok, etc.).
+
+**Reasoning:** This structure isn't arbitrary feature bundling — it mirrors AD-007's existing architectural principle that adaptive AI should only activate once real execution history exists, meaning Stage 3 is technically dependent on Stage 2, not just priced above it. This gives the tier ladder both a business logic and a technical logic that reinforce each other.
+
+**Alternatives Considered:** Collapsing Starter and Pro into a single "Tier 1" stage, with Creator+ as "Tier 2" — rejected in favor of preserving all three original paid price points, since Creator+ needed its own distinct capability (multi-platform distribution) rather than folding into the AI tier.
+
+**Trade-offs:** Stage 4 (multi-platform distribution) requires a new architecture component not currently defined anywhere in system_architecture.md — this is real new scope, not a repackaging of existing planned work, and is meaningfully more complex/AI-dependent than the other three stages. It should not be built until Stages 1-3 are validated with real users.
+
+**Expected Outcome:** pricing.md updated to reflect the 4-stage structure (v3). This becomes the reference model for scoping MAP-005 onward (Decision Engine, Completion/Input Tracking, AI Architecture) and a future PRD for the Stage 4 Distribution Service.
+
+**Actual Outcome:** _(update once Stages 1-3 are built and the tier structure is validated with real users)_
+
+**Related Documents:** pricing.md (v3), system_architecture.md (AD-007, §17-31), decision_log.md ("Freemium pivot," same date), mvp_backlog.md
+
+**Status:** Active
+
+---
 
