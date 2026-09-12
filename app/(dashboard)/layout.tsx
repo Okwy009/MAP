@@ -4,7 +4,7 @@ import { LayoutDashboard, Calendar, CheckSquare, User, Settings, LogOut } from "
 import { logout } from "@/app/actions/auth";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Today", href: "/" },
+  { icon: LayoutDashboard, label: "Today", href: "/today" },
   { icon: Calendar, label: "Calendar", href: "/calendar" },
   { icon: CheckSquare, label: "Tracker", href: "/tracker" },
   { icon: User, label: "Profile", href: "/profile" },
