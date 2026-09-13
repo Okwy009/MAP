@@ -2,7 +2,9 @@ import { createProfileRepository } from "@/repositories/profile.repository";
 import { computeCompletion } from "@/services/onboarding/completion";
 import { createClient } from "@/lib/supabase/server";
 
-const TALLY_FORM_URL = "https://tally.so/forms/zxjJMR";
+// NOT tally.so/forms/zxjJMR -- that's the owner-only editor/dashboard URL,
+// login-gated. tally.so/r/... is the actual public-facing form.
+const TALLY_FORM_URL = "https://tally.so/r/zxjJMR";
 
 /**
  * Persistent, non-blocking onboarding nudge (FR1/FR2) — reads the profile

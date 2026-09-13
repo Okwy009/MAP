@@ -247,3 +247,29 @@
 
 ---
 
+## Decision
+
+**Date:** 2026-09-12
+
+**Owner:** Founder
+
+**Question:** Is MAP-003 (Creator Profile) complete?
+
+**Decision:** Yes. Schema extended (migration 000005), GET/PATCH /api/profile built, and — critically — a pre-existing public-read RLS vulnerability on the profiles table (present since MAP-001's original migration 000001) was discovered and fixed in the same pass.
+
+**Reasoning:** Verified against the real live database and a real migrated creator's account, not just unit tests: RLS confirmed to block cross-creator reads and writes while allowing own-profile access; partial-update semantics confirmed correct via real HTTP requests; unauthenticated access correctly redirects. Test data was cleaned up afterward with a confirmed reset, leaving no residue on real creator data.
+
+**Alternatives Considered:** N/A — this entry records verified completion.
+
+**Trade-offs:** None. This is the third feature this session (after MAP-001, MAP-002) to ship with real production verification rather than assumed correctness from passing unit tests alone.
+
+**Expected Outcome:** MAP-003 status moves to Done. MAP-004 (Creator Onboarding) is now unblocked and can begin, since it depends on this schema existing.
+
+**Actual Outcome:** Confirmed — RLS fix verified live, API endpoints verified against real database, zero data residue from testing.
+
+**Related Documents:** PRD-0004-Creator-Profile.md, IP-0004-Creator-Profile.md, supabase/migrations/000005_add_creator_profile_fields.sql, decision_log.md ("profiles RLS fix," same date)
+
+**Status:** Active
+
+---
+

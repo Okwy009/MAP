@@ -1,7 +1,8 @@
 # Onboarding service (MAP-004, Tally integration)
 
 Implements PRD-0005 v1.0 / IP-0005. No native form — the existing Tally form
-(`https://tally.so/forms/zxjJMR`) is the UI; MAP only receives its webhook.
+(`https://tally.so/r/zxjJMR` — not `tally.so/forms/zxjJMR`, which is the
+owner-only editor URL, login-gated) is the UI; MAP only receives its webhook.
 
 ## Layering
 

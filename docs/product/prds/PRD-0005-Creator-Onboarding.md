@@ -225,7 +225,7 @@ GET  /api/profile/completion — returns completion percentage + missing fields 
 
 **Internal dependencies:** MAP-003 (Creator Profile) — complete, but needs the follow-up migration described above.
 
-**External dependencies:** The existing Tally form (https://tally.so/forms/zxjJMR) and its webhook configuration.
+**External dependencies:** The existing Tally form (https://tally.so/r/zxjJMR) and its webhook configuration.
 
 **Blocks:** MAP-005 (Decision Engine) needs this data to function meaningfully.
 
