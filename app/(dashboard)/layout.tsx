@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LayoutDashboard, Calendar, CheckSquare, User, Settings, LogOut } from "lucide-react";
 
 import { logout } from "@/app/actions/auth";
+import { OnboardingChecklist } from "@/components/onboarding/OnboardingChecklist";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Today", href: "/today" },
@@ -50,7 +51,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6">{children}</main>
+      <main className="flex-1 p-6">
+        <OnboardingChecklist />
+        {children}
+      </main>
     </div>
   );
 }

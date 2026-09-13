@@ -195,3 +195,55 @@
 
 ---
 
+## Decision
+
+**Date:** 2026-09-12
+
+**Owner:** Founder
+
+**Question:** Should PRD-0003 (Landing Page) be built, or is it superseded by the auth-aware homepage fix?
+
+**Decision:** Closed — not built. Superseded by the homepage rebuild (app/page.tsx), which directly resolved the "too direct" signup problem this PRD was written for.
+
+**Reasoning:** The homepage fix shipped a real, working solution to the concrete problem faster than the fuller landing page would have, and covers the practical need for now (auth-aware navigation, clear Sign In/Sign Up entry points). PRD-0003's more ambitious marketing-page vision (headline copy, "how it works" explanation, pricing teaser) remains a reasonable idea but is not the current priority.
+
+**Alternatives Considered:** Building the full PRD-0003 landing page anyway — rejected as unnecessary scope right now, given the homepage fix already resolved the observed problem.
+
+**Trade-offs:** MAP still doesn't have a fuller marketing/value-proposition page for cold, un-authenticated traffic (e.g. someone arriving from a social share with zero context on MAP). This is accepted as a future consideration, not a current gap that blocks anything.
+
+**Expected Outcome:** PRD-0003 is marked Closed in docs/product/prds/. No further work planned unless real traffic patterns later show the minimal homepage copy is insufficient.
+
+**Actual Outcome:** _(revisit if cold-traffic conversion becomes a concern later)_
+
+**Related Documents:** PRD-0003-Landing-Page.md (Closed), app/page.tsx (the superseding fix)
+
+**Status:** Active
+
+---
+
+## Decision
+
+**Date:** 2026-09-12
+
+**Owner:** Founder
+
+**Question:** The `profiles` table's SELECT policy (set in migration 000001) allows `using (true)` — any row, all columns, publicly readable. Should this be fixed as part of MAP-003?
+
+**Decision:** Yes. Fixed in migration 000005, alongside the Creator Profile column additions. New policy: `for select using ((select auth.uid()) = id)` — creators may read only their own profile.
+
+**Reasoning:** The original public-read policy was likely harmless when `profiles` held only `username`/`avatar_url`, but MAP-003 adds real personal context (audience, tone, primary_goal, ai_preference) that should never have been publicly readable in the first place. This was discovered during MAP-003 implementation, not through a dedicated security audit — a reminder that RLS policies need re-evaluation whenever a table's contents change meaningfully, not just when a table is first created.
+
+**Alternatives Considered:** Leaving the fix for a separate, dedicated security pass — rejected; the exposure is real and already live in production, so it should close as soon as it's found rather than staying open while its own PRD's scope is debated.
+
+**Trade-offs:** None identified. Verified before applying that nothing in the current codebase relies on reading another user's profile via the RLS-scoped (non-service-role) client — the fix is a pure correction with no functional side effects.
+
+**Expected Outcome:** From the moment migration 000005 is applied, no creator's profile is readable by anyone except themselves (server-side/service-role access, used for legitimate purposes like the Gumroad email-matching lookup, is unaffected — it deliberately bypasses RLS by design).
+
+**Actual Outcome:** _(confirm after migration 000005 is applied — verify via a test query that a creator cannot read another creator's profile through the normal client)_
+
+**Related Documents:** supabase/migrations/000005_add_creator_profile_fields.sql, supabase/migrations/000001_create_profiles_table.sql (original policy), PRD-0004-Creator-Profile.md
+
+**Status:** Active
+
+---
+
