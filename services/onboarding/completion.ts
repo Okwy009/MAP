@@ -5,10 +5,19 @@ interface TrackedField {
   label: string;
   /**
    * Whether this field blocks `onboarding_complete` from flipping true when
-   * missing. `newsletter_days` is excluded: it's a conditional field (only
-   * relevant for weekly cadence) with no Tally key mapped to it yet — never
-   * populated (see tally-domain-service.ts), so requiring it would make
-   * `onboarding_complete` permanently unreachable.
+   * missing. Excluded fields have no live write path from the Tally webhook,
+   * so requiring them would make `onboarding_complete` permanently
+   * unreachable:
+   *  - `newsletter_days` — conditional (only relevant for weekly cadence),
+   *    no Tally key mapped to it yet (see tally-domain-service.ts).
+   *  - `publishing_cadence` — MAP-003's original field, superseded by the
+   *    more granular `posting_frequency_type` + `posting_frequency_count`
+   *    pair once the real Tally form was inspected. Confirmed superseded,
+   *    not just unmapped: PRD-0005's Data Requirements lists exactly which
+   *    MAP-003 fields were "reused as-is" by the Tally mapping, and
+   *    `publishing_cadence` is deliberately not among them. Still settable
+   *    via PATCH /api/profile directly, so still tracked for the
+   *    percentage — just doesn't gate completion.
    */
   requiredForComplete: boolean;
 }
@@ -22,7 +31,7 @@ const TRACKED_FIELDS: TrackedField[] = [
   { key: "audience", label: "Audience", requiredForComplete: true },
   { key: "focusArea", label: "Content focus", requiredForComplete: true },
   { key: "tone", label: "Tone", requiredForComplete: true },
-  { key: "publishingCadence", label: "Publishing cadence", requiredForComplete: true },
+  { key: "publishingCadence", label: "Publishing cadence", requiredForComplete: false },
   { key: "primaryGoal", label: "Primary goal", requiredForComplete: true },
   { key: "aiPreference", label: "AI assistance preference", requiredForComplete: true },
   { key: "reviewCadence", label: "Review cadence", requiredForComplete: true },
