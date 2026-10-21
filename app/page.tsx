@@ -1,11 +1,12 @@
 import Link from "next/link";
 
 import { logout } from "@/app/actions/auth";
+import { Landing } from "@/components/landing/Landing";
 import { createClient } from "@/lib/supabase/server";
 
 /**
  * Permanent home screen at "/" — shown every time, not a one-time welcome.
- * Auth-aware: signed-out visitors see branding + sign in/up; signed-in
+ * Auth-aware: signed-out visitors see the landing page; signed-in
  * creators see a greeting, a demo link, and their way into the app.
  */
 export default async function Home() {
@@ -15,31 +16,7 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <header className="flex justify-end p-6">
-          <Link href="/" className="text-lg font-bold">
-            MAP
-          </Link>
-        </header>
-        <main className="flex flex-1 flex-col items-center justify-center gap-4 p-6">
-          <div className="flex gap-4">
-            <Link
-              href="/auth/login"
-              className="rounded-md bg-primary px-6 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/auth/signup"
-              className="rounded-md border border-input bg-background px-6 py-2 font-medium text-foreground transition-colors hover:bg-accent"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </main>
-      </div>
-    );
+    return <Landing />;
   }
 
   const { data: profile } = await supabase
