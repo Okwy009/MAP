@@ -1,8 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { logout } from "@/app/actions/auth";
 import { Landing } from "@/components/landing/Landing";
 import { createClient } from "@/lib/supabase/server";
+
+const TITLE = "My Accountability Partner: Stop restarting. Keep making it.";
+const DESCRIPTION =
+  "One clear move a day for creators with day jobs, so you keep showing up instead of starting over every Monday. Free for now.";
+
+export const metadata: Metadata = {
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    siteName: "My Accountability Partner",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+};
 
 /**
  * Permanent home screen at "/" — shown every time, not a one-time welcome.

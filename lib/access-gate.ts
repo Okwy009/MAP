@@ -16,12 +16,15 @@
 
 export type GateDecision = { action: "allow" } | { action: "redirect"; to: "/auth/login" | "/" };
 
+// Always reachable regardless of auth status:
+// - "/": app/page.tsx renders its own signed-out landing page.
+// - the share-card images: fetched by social crawlers, which never have a session.
+const PUBLIC_PATHS = new Set(["/", "/opengraph-image", "/twitter-image"]);
+
 export function resolveGate(input: { pathname: string; isAuthenticated: boolean }): GateDecision {
   const { pathname, isAuthenticated } = input;
 
-  // "/" is always reachable: app/page.tsx renders its own anonymous-visitor
-  // view (Sign In / Sign Up), so the gate must not bounce it.
-  if (pathname === "/") {
+  if (PUBLIC_PATHS.has(pathname)) {
     return { action: "allow" };
   }
 
