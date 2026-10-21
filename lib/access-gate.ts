@@ -19,6 +19,12 @@ export type GateDecision = { action: "allow" } | { action: "redirect"; to: "/aut
 export function resolveGate(input: { pathname: string; isAuthenticated: boolean }): GateDecision {
   const { pathname, isAuthenticated } = input;
 
+  // "/" is always reachable: app/page.tsx renders its own anonymous-visitor
+  // view (Sign In / Sign Up), so the gate must not bounce it.
+  if (pathname === "/") {
+    return { action: "allow" };
+  }
+
   // MAP-001: no session at all.
   if (!isAuthenticated) {
     return pathname.startsWith("/auth")
