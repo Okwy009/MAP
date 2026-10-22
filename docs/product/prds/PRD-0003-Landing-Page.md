@@ -15,7 +15,7 @@
 
 **Version:** 1.0
 
-**Status:** Closed — Superseded (not built)
+**Status:** Reopened and completed (2026-10-21)
 
 ---
 
@@ -204,10 +204,20 @@ None.
 
 # Founder Decision
 
-**Decision:** Closed — not built. Superseded by the auth-aware homepage fix (app/page.tsx, shipped 2026-09-12), which resolved the core problem this PRD was written for (the "too direct" signup experience with no context). A fuller standalone marketing/landing page may be revisited later if the homepage's minimal copy proves insufficient once MAP has more real traffic — but is not currently planned.
+# Founder Decision
 
-**Reasoning:** The immediate, concrete problem (a bare-title homepage with no context or navigation) was fixed directly and more urgently by the homepage auth-aware rebuild, which shipped faster and covers the practical need. The full marketing-page vision in this PRD (headline, "how it works," pricing teaser) remains a reasonable future idea but isn't the current priority.
+**Decision:** Reopened and completed. The full landing page described in this PRD was built and shipped on 2026-10-21 (commits e2c7127, 881c50c, 53811e4). It replaces the earlier closure on 2026-09-12, which had judged the auth-aware homepage fix sufficient.
 
-**Date:** 2026-09-12
+**Reasoning:** Once the freemium model and the four-stage pricing were in place, visitors still had no explanation of what MAP is before being asked to sign up. The minimal homepage was not enough. See the 2026-10-21 entry in decision_log.md.
+
+**Process note:** This was built before the PRD was formally reopened, which breaks the PRD-before-code rule (AD-009). It is recorded here and in the decision log rather than hidden.
+
+**Deviations from this PRD as written:**
+- FR4 (static page, no auth check): the root page also shows a logged-in view (welcome, demo link, dashboard, log out), so it is not purely static.
+- The page includes an embedded demo video and a founder note, which were not in the original section list.
+- Tracking is shown as "Coming soon" because MAP-008 is not live.
+- The open question on redirecting authenticated creators is resolved: logged-in visitors see a welcome view at "/", not a redirect.
+
+**Date:** 2026-10-21
 
 **Owner:** Founder
