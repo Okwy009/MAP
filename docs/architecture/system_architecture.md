@@ -733,19 +733,29 @@ The authoritative data always resides in MAP's database.
 
 If synchronization fails, MAP continues functioning normally.
 
-AD-007 — Deterministic Decision Engine First
+## AD-007 — Deterministic Decision Engine First (Amended 2026-09-13)
 
-The MVP Decision Engine uses explicit rules.
+**Status:** Approved (Amended)
+**Original decision date:** (system_architecture.md v2.0 baseline)
+**Amendment date:** 2026-09-13
+**Decision Log Reference:** See decision_log.md, "MAP-005 v2 pivot" (2026-09-13)
 
-Adaptive AI recommendations are introduced only after sufficient execution history exists.
+**Original text (for reference, superseded below):**
+> The MVP Decision Engine uses explicit rules. Adaptive AI recommendations are introduced only after sufficient execution history exists. This makes recommendations explainable, predictable, testable before optimization through machine learning.
 
-This makes recommendations:
+**Correction:** This was written before the founder's real, already-operating content generation process was directly investigated. That process — generating each creator's 30-day content calendar — has used AI from day one, not after execution history accumulates. It was never deterministic, and treating it as a future-state goal misdescribed the actual product.
 
-Explainable
-Predictable
-Testable
+**What actually holds, amended:**
 
-before optimization through machine learning.
+MAP distinguishes two different kinds of "intelligence" that were previously conflated under one deterministic-first principle:
+
+1. **Content generation (the 30-day calendar)** — AI-driven from day one. Uses a structured, non-negotiable framework (6 content pillars mapped to value-ladder stages, strict anti-fabrication rules, a red-team self-check) rather than open-ended generation. This is not "adaptive AI learning from history" — it's AI applying a fixed, evidence-based strategy to a creator's profile. Explainability comes from the framework's structure and hard rules, not from avoiding AI.
+
+2. **Adaptive personalization (tuning recommendations based on a creator's own behavior over time — e.g., reducing workload after missed days, increasing challenge after strong consistency)** — this is the capability the original AD-007 language actually described, and the "wait until execution history exists" principle still correctly applies here. This remains deterministic-rules-first until real per-creator history exists to adapt against.
+
+**Practical implication:** MAP-005 (content generation) is AI-driven, built now. A future, distinct capability (personalization tuning based on completion/miss patterns — originally implied by AD-007, likely MAP-014 "Recovery Mode" and MAP-017 "Adaptive Recommendations" in the fuller backlog) remains deterministic-first until real history exists, as originally intended.
+
+Changing this amendment again requires a new decision log entry, per this document's own governance standard.
 
 AD-008 — Repository as the Source of Truth
 

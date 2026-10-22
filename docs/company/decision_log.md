@@ -273,3 +273,106 @@
 
 ---
 
+## Decision
+
+**Date:** 2026-09-13
+
+**Owner:** Founder
+
+**Question:** Is MAP-004 (Creator Onboarding) complete?
+
+**Decision:** Yes. Real Tally form submissions correctly write to a matched creator's profile via webhook, the completion checklist accurately reflects real progress, and onboarding_complete correctly flips to true on a genuinely fully-answered submission.
+
+**Reasoning:** Verified end-to-end against the live production environment, not just unit tests: a real Tally form (tally.so/r/zxjJMR) submission with real, thought-out answers correctly matched to a real MAP account via email, wrote all 19 mapped fields accurately, and the dashboard checklist displayed "Profile complete" — confirmed by screenshot. Two real bugs were found and fixed during this verification process rather than being discovered later by an actual creator: (1) the Tally form link pointed to the owner-only dashboard URL instead of the public form, and (2) publishing_cadence, a field superseded by more granular columns during the real Tally payload inspection, was still marked as required for completion, making onboarding_complete permanently unreachable for any real submission.
+
+**Alternatives Considered:** N/A — this entry records verified completion.
+
+**Trade-offs:** newsletter_days remains permanently unmapped (no corresponding Tally field was ever identified) — excluded from the completion requirement, shown honestly in the checklist's missing-fields list, logged as an accepted known gap rather than a blocker.
+
+**Expected Outcome:** MAP-004 status moves to Done. MAP-005 (Decision Engine MVP) is now unblocked — it can begin work using real creator profile data collected through this flow.
+
+**Actual Outcome:** Confirmed — real submission, real match, real write, real checklist reflecting "Profile complete" on a live production account.
+
+**Related Documents:** PRD-0005-Creator-Onboarding.md, IP-0005-Creator-Onboarding.md, services/onboarding/completion.ts, supabase/migrations/000006_add_onboarding_fields.sql
+
+**Status:** Active
+
+---
+
+## Decision
+
+**Date:** 2026-09-13
+
+**Owner:** Founder
+
+**Question:** Does MAP-005 (Decision Engine MVP) as built match the founder's real, already-operating content generation process?
+
+**Decision:** No. MAP-005 v1 (a simple deterministic "today's post" rule engine, PRD-0006/IP-0006) is fully superseded by MAP-005 v2 (PRD-0007), built around the founder's real mechanism: an AI-driven, 6-pillar value-ladder content strategy that generates a full 30-day calendar per creator, matching the schema already live in each client's Notion "Content Master" database.
+
+**Reasoning:** Direct investigation (reading the content-nudge-calendar and notion-post-drafter skills, and the live Notion database schema for "My Accountability Partner") revealed the real product has used AI from day one — not after execution history accumulates, as AD-007 stated. The real system enforces strict anti-fabrication rules (never invent testimonials, founder history, or urgency), interleaves 6 content pillars weekly rather than sequencing them (an evidence-based choice from prior months' data), and outputs a schema — `Status, Content Title, Due Date, Prompt, Platform, Type, Tags, Goal/CTA, Value Ladder Stage, Story/Hook` — already matching the live Notion structure exactly. MAP-005 v1 did not reflect any of this.
+
+**Alternatives Considered:** Keep MAP-005 v1 as a lightweight fallback alongside the real system — rejected by Founder in favor of full replacement, since the simple version doesn't serve any real purpose once the actual mechanism is built.
+
+**Trade-offs:** MAP-005 v2 is a substantially larger build than v1 — real AI generation (via direct Anthropic API calls, since Claude.ai skills can't be invoked from MAP's backend), porting the pillar/voice/anti-fabrication rules into the application itself, and likely absorbing MAP-006's originally-planned scope (Personalized 30-Day Plan), since the real mechanism generates the full 30-day plan directly rather than one recommendation that later becomes a plan.
+
+**Expected Outcome:** PRD-0006/IP-0006 marked Closed — Superseded. PRD-0007 drafted for MAP-005 v2. AD-007 amended to reflect that content generation has used AI from day one for this specific pathway, while preserving the deterministic-first principle for adaptive personalization tuning (a distinct, later capability).
+
+**Actual Outcome:** _(update once MAP-005 v2 is built and verified)_
+
+**Related Documents:** PRD-0006-Decision-Engine-MVP.md (Closed), IP-0006-Decision-Engine-MVP.md (Closed), PRD-0007-Content-Calendar-Generator.md (new), system_architecture.md (AD-007, amended), content-nudge-calendar and notion-post-drafter skills
+
+**Status:** Active
+
+---
+
+## Decision
+
+**Date:** 2026-09-13
+
+**Owner:** Founder
+
+**Question:** Should MAP-006 (AI Content Calendar Generation, PRD-0007) be built now?
+
+**Decision:** Deferred. The Founder will continue the current manual process (running the calendar-generation prompt by hand, updating each client's individual Notion dashboard manually) rather than automating it at this time.
+
+**Reasoning:** PRD-0007/IP-0007 were approved the same day, then reversed after real cost figures were obtained: Anthropic API usage (~$5–$20/month at modest volume) plus a likely-required Vercel Pro upgrade (~$20/month — Hobby's free tier is restricted to non-commercial use, a separate issue from this feature but surfaced by the same investigation), totaling roughly $25–$40/month to start. Combined with the fact that this would be MAP's first AI integration, first background/async job, and first internal-only UI — genuinely new infrastructure, not an incremental feature — the Founder chose to hold off until manual volume or economics clearly justify the investment.
+
+**Alternatives Considered:** Building anyway at low volume to get ahead of scale — rejected; premature given the manual process still works fine at current client volume, and per MAP's own principle of preferring simple solutions unless evidence justifies added complexity.
+
+**Trade-offs:** The manual bottleneck (Founder personally running each calendar) remains in place. This is accepted deliberately, not overlooked.
+
+**Expected Outcome:** MAP-006 stays on the backlog, fully specified (PRD-0007/IP-0007 remain valid, detailed blueprints), ready to build once the Founder decides volume/revenue justifies it — no rework needed to pick this back up later, just approval.
+
+**Actual Outcome:** _(revisit when reconsidering automation)_
+
+**Related Documents:** PRD-0007-AI-Content-Calendar.md (Deferred), IP-0007-AI-Content-Calendar.md (Deferred), PRD-0006-Decision-Engine-MVP.md (MAP-005 — remains the sole `/today` mechanism until this is revisited)
+
+**Status:** Active
+
+
+## Decision
+
+**Date:** 2026-10-21
+
+**Owner:** Founder
+
+**Question:** Should MAP's logged-out homepage become a full landing page, and what happens to PRD-0003 (closed as superseded on 2026-09-13)?
+
+**Decision:** Yes. The logged-out homepage at "/" is now a full landing page (hero, founder note, How it works, embedded demo video, "Sound familiar?", closing call to action), with login and signup pages restyled to match. PRD-0003's closure is reversed in practice: its original scope (a real marketing page) has now been built, so PRD-0003 should be re-marked "Reopened and completed, 2026-10-21." Sign-in itself is unchanged (real Magic Link auth, not the Replit mockup's fake popup).
+
+**Reasoning:** The 2026-09-12 homepage fix covered navigation only. Direct observation of the live site showed anonymous visitors had no explanation of what MAP is. A routing bug also meant logged-out visitors never reached "/" at all (access gate sent them to /auth/login); that was fixed first (commit e2c7127) and verified live.
+
+**Process note:** This was built without first reopening PRD-0003 on paper, which breaks the PRD-before-code rule (AD-009). Recorded here retroactively rather than hidden.
+
+**Trade-offs:**
+- The landing page shows an example "Here's your post for today" card. The engine behind it (MAP-005) has uncommitted files and may not be deployed yet, so the page can promise something /today doesn't deliver live. Tracking is honestly marked "Coming soon."
+- Landing and auth pages now use the new light, lavender look; the logged-in dashboard still uses the older dark theme. Two visual identities until a decision is made.
+- /pricing still sends logged-out visitors to login.
+
+**Expected Outcome:** More logged-out visitors understand MAP before signing up. Success measure: visit-to-signup rate.
+
+**Actual Outcome:** _(update after real traffic)_
+
+**Related Documents:** PRD-0003-Landing-Page.md, commits e2c7127, 881c50c, 53811e4
+
+**Status:** Active
